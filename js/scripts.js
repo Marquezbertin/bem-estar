@@ -1,81 +1,89 @@
-$(function () {
+document.addEventListener("DOMContentLoaded", function () {
+    // CONTROLE DO MENU MOBILE
+    const mobileAction = document.querySelector('.mobile_action');
+    const mainHeaderNav = document.querySelector('.main_header_nav');
 
-    //CONTROLE DO MENU MOBILE
-    $('.mobile_action').click(function () {
-        if (!$(this).hasClass('active')) {
-            $(this).addClass('active');
-            $('.main_header_nav').animate({'left': '0px'}, 500);
+    mobileAction.addEventListener('click', function () {
+        if (!this.classList.contains('active')) {
+            this.classList.add('active');
+            mainHeaderNav.style.left = '0px';
         } else {
-            $(this).removeClass('active');
-            $('.main_header_nav').animate({'left': '-100%'}, 500);
+            this.classList.remove('active');
+            mainHeaderNav.style.left = '-100%';
         }
     });
 
-    //HEADER
-    $(window).scroll(function () {
-          
-          if($(this).scrollTop() > 0){
-              
-              if (!$('.main_header').hasClass('fixed')){
-                   $('.main_header').stop().addClass('fixed');
-              }
-          
-          }else{
-          
-              $('.main_header').removeClass('fixed');
-          
-          }
+    // HEADER FIXO AO SCROLL
+    const mainHeader = document.querySelector('.main_header');
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 0) {
+            mainHeader.classList.add('fixed');
+        } else {
+            mainHeader.classList.remove('fixed');
+        }
     });
 
-    //Scroll Ancora
-    var $doc = $('html, body');
-     $('.scrollSuave').click(function() {
-        $doc.animate({
-            scrollTop:$($.attr(this,'href')).offset().top -100
-        }, 500);        
-        return false;
+    // SCROLL SUAVE PARA ÂNCORAS
+    const scrollLinks = document.querySelectorAll('.scrollSuave');
+    scrollLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            const offset = targetElement.offsetTop - 100;
+
+            window.scrollTo({
+                top: offset,
+                behavior: 'smooth'
+            });
+        });
     });
-    //Scroll Ancora
-    
-    //Menu Ativo
-    $(function(){
 
-        var links  = $("#top a");
+    // MENU ATIVO
+    const links = document.querySelectorAll('#top a');
+    window.addEventListener('scroll', function () {
+        const topScroll = window.scrollY;
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            const section = document.querySelector(href);
+            const sectionTop = section.offsetTop - 101;
+            const sectionHeight = section.offsetHeight;
 
-        $(window).scroll(function(){
-            var topScroll = $(window).scrollTop();
-            links.each(function(){
-               var href       = $(this).attr('href');
-               var el         = $(href);
-               var posSection = el.offset().top -101 ;
-               var hSection   = el.height();
+            if (topScroll >= sectionTop && topScroll < sectionTop + sectionHeight) {
+                links.forEach(l => l.classList.remove('menuAtivo'));
+                link.classList.add('menuAtivo');
+            } else {
+                link.classList.remove('menuAtivo');
+            }
+        });
+    });
 
-                if(posSection <= topScroll && (posSection + hSection) > topScroll){
-                    links.removeClass('menuAtivo')
-                    $(this).addClass('menuAtivo');
-                }else{
-                    $(this).removeClass("menuAtivo");
+    // MAGNIFIC POPUP (Substituído por Lightbox Simples)
+    const galleryLinks = document.querySelectorAll('.galeria a');
+    galleryLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const imageSrc = this.getAttribute('href');
+            const lightbox = document.createElement('div');
+            lightbox.classList.add('lightbox');
+            lightbox.innerHTML = `
+                <div class="lightbox-content">
+                    <img src="${imageSrc}" alt="Imagem da Galeria">
+                    <button class="lightbox-close" aria-label="Fechar">×</button>
+                </div>
+            `;
+            document.body.appendChild(lightbox);
+
+            const closeButton = lightbox.querySelector('.lightbox-close');
+            closeButton.addEventListener('click', () => {
+                document.body.removeChild(lightbox);
+            });
+
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    document.body.removeChild(lightbox);
                 }
             });
         });
-
     });
-    //Menu Ativo
-
-    //Magnific Popup
-    $('.galeria').magnificPopup({ 
-      type: 'image',
-      delegate: 'a',
-      
-      gallery:{enabled:true},
-      callbacks: {
-        
-        buildControls: function() {
-         
-          this.contentContainer.append(this.arrowLeft.add(this.arrowRight));
-        }
-        
-      }
-    });
-
 });
