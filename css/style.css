@@ -1,3 +1,20 @@
+:root {
+    --primary-color: #4caf50;
+    --secondary-color: #ffffff;
+    --font-family: 'Inter', sans-serif;
+    --font-size-base: 16px;
+    --line-height: 1.5;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
 /*CLASS*/
 .branco   { color: #ffffff; }
 .verde    { color: #8cc53e; }
@@ -361,6 +378,17 @@
 @media (min-width:100em){
 
 
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .main_header_nav ul {
+        display: none;
+    }
+
+    .mobile_action {
+        display: block;
+    }
 }
 
 
