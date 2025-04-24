@@ -1,4 +1,4 @@
-# Bem-Estar e Saúde Online
+# Bem-Estar e Saúde Online.
 Este repositório contém o código-fonte e os arquivos necessários para o desenvolvimento de um site voltado para o bem-estar e a saúde online.
 
 ## Descrição
